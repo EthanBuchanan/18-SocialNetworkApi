@@ -1,25 +1,25 @@
 const { Schema, Types } = require('mongoose');
 const { schema } = require('./Student');
 const Thoughts = require("./Thought");
-const Friends = require("./Thought");
+//const Friends = require("./Thought");
 
 const userSchema = new Schema(
   {
     thoughts: [Thoughts],
-    friends: [Friends],
+    friends: [userSchema],
     username: {
       type: String,
       required: true,
+      unique: true,
+      trim: true
 
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      unique
     },
-    friendCount: {
-      type: Number,
-      default: 0
-    }
+   
 
 
     /*
@@ -53,5 +53,9 @@ const userSchema = new Schema(
   }
 
 );
+
+userSchema.virtual("friendCount").get(function(value, virtual, doc) {
+  return friends.length;
+  })
 
 module.exports = userSchema;
